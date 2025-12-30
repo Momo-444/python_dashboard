@@ -127,12 +127,8 @@ export default function LeadsPage() {
         },
         body: JSON.stringify({
           lead_id: lead.id,
-          // L'API Python s'attend à ces champs pour la création de devis auto/semi-auto
-          // Si on veut generer un devis intelligent basé sur le budget :
-          budget_negocie: lead.budget_estime || undefined,
-          // Si on avait des lignes custom, on les passerait ici.
-          // Pour l'instant, on laisse l'IA ou le budget faire le travail 
-          // ou on génère un devis vide modifiable.
+          // Priorité au budget négocié s'il existe (mis à jour manuellement), sinon l'estimé
+          budget_negocie: lead.budget_negocie || lead.budget_estime || undefined,
           notes_devis_custom: "Devis généré depuis le dashboard",
         }),
       });
