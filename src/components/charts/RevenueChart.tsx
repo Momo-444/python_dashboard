@@ -18,7 +18,7 @@ export const RevenueChart = () => {
       const { data: devis } = await supabase
         .from('devis')
         .select('montant_ttc, date_creation')
-        .in('statut', ['payes', 'paye', 'signe', 'signé', 'accepte', 'accepté', 'signé']);
+        .in('statut', ['payes', 'payés', 'paye', 'payé', 'Payé', 'signe', 'signé', 'Signé', 'accepte', 'accepté', 'Accepté']);
 
       const chartData = months.map((month) => {
         const monthStart = startOfMonth(month);

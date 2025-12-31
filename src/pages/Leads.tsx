@@ -47,7 +47,7 @@ export default function LeadsPage() {
       }
 
       const { data } = await query;
-      return data || [];
+      return (data as unknown as Lead[]) || [];
     },
   });
 
@@ -214,7 +214,8 @@ export default function LeadsPage() {
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
                     {lead.nom} {lead.prenom}
-                    {(lead.lead_chaud || (lead.score_qualification && lead.score_qualification >= 80)) && (
+                    {/* Affiche le feu UNIQUEMENT si le lead a cliqué sur le lien (lead_chaud ou clic count > 0) */}
+                    {(lead.lead_chaud || (lead.email_clic_count && lead.email_clic_count > 0)) && (
                       <Flame className="h-5 w-5 text-orange-500 fill-orange-500 animate-pulse" />
                     )}
                   </CardTitle>
