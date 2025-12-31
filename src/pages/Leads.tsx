@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Trash2, Edit, FileText, Filter } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, FileText, Filter, Flame } from 'lucide-react';
 import { toast } from 'sonner';
 import { LeadDialog } from '@/components/leads/LeadDialog';
 import { cn } from '@/lib/utils';
@@ -212,8 +212,11 @@ export default function LeadsPage() {
             <Card key={lead.id}>
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">
+                  <CardTitle className="text-lg flex items-center gap-2">
                     {lead.nom} {lead.prenom}
+                    {(lead.lead_chaud || (lead.score_qualification && lead.score_qualification >= 80)) && (
+                      <Flame className="h-5 w-5 text-orange-500 fill-orange-500 animate-pulse" />
+                    )}
                   </CardTitle>
                   <StatusBadge statut={lead.statut as StatusType} />
                 </div>

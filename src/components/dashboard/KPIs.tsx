@@ -31,8 +31,8 @@ export const KPIs = () => {
       const { data } = await supabase
         .from('devis')
         .select('montant_ttc')
-        .eq('statut', 'payes');
-      
+        .in('statut', ['payes', 'paye', 'signe', 'signé', 'accepte', 'accepté', 'signé']);
+
       return data?.reduce((sum, devis) => sum + (devis.montant_ttc || 0), 0) || 0;
     },
   });

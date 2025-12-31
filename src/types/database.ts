@@ -38,6 +38,7 @@ export interface Lead {
   budget_negocie: number | null;
   delai: string | null;
   urgence: string | null;
+  lead_chaud: boolean | null;
   // Email tracking (SendGrid)
   email_ouvert: boolean | null;
   email_ouvert_count: number | null;

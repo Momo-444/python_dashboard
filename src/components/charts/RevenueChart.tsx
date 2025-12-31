@@ -18,12 +18,12 @@ export const RevenueChart = () => {
       const { data: devis } = await supabase
         .from('devis')
         .select('montant_ttc, date_creation')
-        .eq('statut', 'payes');
+        .in('statut', ['payes', 'paye', 'signe', 'signé', 'accepte', 'accepté', 'signé']);
 
       const chartData = months.map((month) => {
         const monthStart = startOfMonth(month);
         const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-        
+
         const monthRevenue = devis?.filter((d) => {
           const devisDate = new Date(d.date_creation);
           return devisDate >= monthStart && devisDate <= monthEnd;
@@ -61,19 +61,19 @@ export const RevenueChart = () => {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={revenueData}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="month" 
+            <XAxis
+              dataKey="month"
               className="text-xs"
             />
-            <YAxis 
+            <YAxis
               className="text-xs"
               tickFormatter={(value) => `${value.toLocaleString()}€`}
             />
-            <Tooltip 
+            <Tooltip
               formatter={(value: number) => [`${value.toLocaleString('fr-FR')} €`, 'CA']}
-              contentStyle={{ 
-                backgroundColor: 'hsl(var(--card))', 
-                border: '1px solid hsl(var(--border))' 
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))'
               }}
             />
             <Bar dataKey="revenue" fill="hsl(var(--primary))" />
