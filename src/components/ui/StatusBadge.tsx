@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-type StatusType = 'signe' | 'envoye' | 'accepte' | 'refuse' | 'payes' 
+type StatusType = 'signe' | 'envoye' | 'accepte' | 'refuse' | 'payes'
   | 'nouveau' | 'contacte' | 'qualifie' | 'devis_envoye' | 'chaud' | 'perdu';
 
 interface StatusBadgeProps {
@@ -32,7 +32,6 @@ const statusConfig: Record<string, { color: string; label: string }> = {
   qualifié: { color: 'bg-emerald-500 hover:bg-emerald-600', label: 'Qualifié' },
   devis_envoye: { color: 'bg-orange-500 hover:bg-orange-600', label: 'Devis envoyé' },
   devis_envoyé: { color: 'bg-orange-500 hover:bg-orange-600', label: 'Devis envoyé' },
-  chaud: { color: 'bg-lime-500 hover:bg-lime-600', label: 'Chaud' },
   perdu: { color: 'bg-gray-500 hover:bg-gray-600', label: 'Perdu' },
 };
 
