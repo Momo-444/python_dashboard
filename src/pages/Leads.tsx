@@ -214,8 +214,8 @@ export default function LeadsPage() {
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
                     {lead.nom} {lead.prenom}
-                    {/* Affiche le feu UNIQUEMENT si le lead a cliqué sur le lien (lead_chaud ou clic count > 0) */}
-                    {(lead.lead_chaud || (lead.email_clic_count && lead.email_clic_count > 0)) && (
+                    {/* Affiche le feu UNIQUEMENT si le lead a ouvert l'email ET cliqué sur le bouton */}
+                    {(lead.ouvert === "oui" && lead.clique === "oui") && (
                       <Flame className="h-5 w-5 text-orange-500 fill-orange-500 animate-pulse" />
                     )}
                   </CardTitle>
