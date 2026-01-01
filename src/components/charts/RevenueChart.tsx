@@ -2,8 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { format, subMonths, startOfMonth } from 'date-fns';
+import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { fr } from 'date-fns/locale';
+
+// Fonction pour parser correctement les dates PostgreSQL
+const parsePostgresDate = (dateString: string): Date => {
+  if (!dateString) return new Date(0);
+  // PostgreSQL retourne "2025-12-30 12:11:02+00", on remplace l'espace par T pour ISO
+  const isoString = dateString.replace(' ', 'T');
+  return new Date(isoString);
+};
 
 export const RevenueChart = () => {
   const { data: revenueData, isLoading } = useQuery({
@@ -22,10 +30,10 @@ export const RevenueChart = () => {
 
       const chartData = months.map((month) => {
         const monthStart = startOfMonth(month);
-        const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+        const monthEnd = endOfMonth(month); // Utilise endOfMonth pour inclure tout le dernier jour
 
         const monthRevenue = devis?.filter((d) => {
-          const devisDate = new Date(d.date_creation);
+          const devisDate = parsePostgresDate(d.date_creation);
           return devisDate >= monthStart && devisDate <= monthEnd;
         }).reduce((sum, d) => sum + (d.montant_ttc || 0), 0) || 0;
 
