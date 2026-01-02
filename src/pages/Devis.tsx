@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Trash2, Edit, ExternalLink, FileText, Filter } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, ExternalLink, FileText, Filter, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { DevisDialog } from '@/components/devis/DevisDialog';
@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { cn } from '@/lib/utils';
 import { StatusBadge } from '@/components/ui/StatusBadge';  // ajuste le chemin si besoin
 import { toast } from 'sonner';
+import { exportToExcel, devisExportColumns } from '@/lib/exportExcel';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -98,15 +99,31 @@ export default function DevisPage() {
           <h1 className="text-3xl font-bold tracking-tight">Devis</h1>
           <p className="text-muted-foreground">Gérez vos devis</p>
         </div>
-        {canEdit && (
-          <Button onClick={() => {
-            setSelectedDevis(null);
-            setDialogOpen(true);
-          }}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouveau devis
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (devis && devis.length > 0) {
+                exportToExcel(devis, devisExportColumns, 'devis_export');
+                toast.success('Export Excel téléchargé');
+              } else {
+                toast.error('Aucune donnée à exporter');
+              }
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Exporter
           </Button>
-        )}
+          {canEdit && (
+            <Button onClick={() => {
+              setSelectedDevis(null);
+              setDialogOpen(true);
+            }}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouveau devis
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, HardHat, Edit, Trash2 } from 'lucide-react';
+import { Plus, Search, HardHat, Edit, Trash2, Download } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { ChantierDialog } from '@/components/chantiers/ChantierDialog';
 import { toast } from 'sonner';
+import { exportToExcel, chantiersExportColumns } from '@/lib/exportExcel';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -99,15 +100,31 @@ export default function ChantiersPage() {
           <h1 className="text-3xl font-bold tracking-tight">Chantiers</h1>
           <p className="text-muted-foreground">Suivez l'avancement des travaux</p>
         </div>
-        {canEdit && (
-          <Button onClick={() => {
-            setSelectedChantier(null);
-            setDialogOpen(true);
-          }}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouveau chantier
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (chantiers && chantiers.length > 0) {
+                exportToExcel(chantiers, chantiersExportColumns, 'chantiers_export');
+                toast.success('Export Excel téléchargé');
+              } else {
+                toast.error('Aucune donnée à exporter');
+              }
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Exporter
           </Button>
-        )}
+          {canEdit && (
+            <Button onClick={() => {
+              setSelectedChantier(null);
+              setDialogOpen(true);
+            }}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouveau chantier
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

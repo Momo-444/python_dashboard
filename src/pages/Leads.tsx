@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Trash2, Edit, FileText, Filter, Flame } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, FileText, Filter, Flame, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { LeadDialog } from '@/components/leads/LeadDialog';
 import { cn } from '@/lib/utils';
 import { StatusBadge } from '@/components/ui/StatusBadge';  // ajuste le chemin si besoin
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { exportToExcel, leadsExportColumns } from '@/lib/exportExcel';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -162,15 +163,31 @@ export default function LeadsPage() {
           <h1 className="text-3xl font-bold tracking-tight">Leads</h1>
           <p className="text-muted-foreground">Gérez vos prospects</p>
         </div>
-        {canEdit && (
-          <Button onClick={() => {
-            setSelectedLead(null);
-            setDialogOpen(true);
-          }}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouveau lead
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (leads && leads.length > 0) {
+                exportToExcel(leads, leadsExportColumns, 'leads_export');
+                toast.success('Export Excel téléchargé');
+              } else {
+                toast.error('Aucune donnée à exporter');
+              }
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Exporter
           </Button>
-        )}
+          {canEdit && (
+            <Button onClick={() => {
+              setSelectedLead(null);
+              setDialogOpen(true);
+            }}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouveau lead
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
