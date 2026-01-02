@@ -97,22 +97,10 @@ export default function UsersPage() {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Utilisateur non créé');
 
-      // 2. Mettre à jour le profil (upsert pour éviter conflit avec trigger auto)
-      // Le trigger Supabase crée automatiquement le profil, on met juste à jour full_name
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: authData.user.id,
-          email: newUserEmail,
-          full_name: newUserFullName,
-        }, { onConflict: 'id' });
+      // Note: Le trigger Supabase 'handle_new_user' crée automatiquement le profil
+      // avec le full_name depuis raw_user_meta_data, donc pas besoin d'insert ici
 
-      // Ignorer l'erreur duplicate key car le trigger a déjà créé le profil
-      if (profileError && !profileError.message?.includes('duplicate key')) {
-        throw profileError;
-      }
-
-      // 3. Assigner le rôle
+      // 2. Assigner le rôle
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({
