@@ -97,16 +97,20 @@ export default function UsersPage() {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Utilisateur non créé');
 
-      // 2. Créer le profil
+      // 2. Mettre à jour le profil (upsert pour éviter conflit avec trigger auto)
+      // Le trigger Supabase crée automatiquement le profil, on met juste à jour full_name
       const { error: profileError } = await supabase
         .from('profiles')
-        .insert({
+        .upsert({
           id: authData.user.id,
           email: newUserEmail,
           full_name: newUserFullName,
-        });
+        }, { onConflict: 'id' });
 
-      if (profileError) throw profileError;
+      // Ignorer l'erreur duplicate key car le trigger a déjà créé le profil
+      if (profileError && !profileError.message?.includes('duplicate key')) {
+        throw profileError;
+      }
 
       // 3. Assigner le rôle
       const { error: roleError } = await supabase
@@ -319,7 +323,7 @@ export default function UsersPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe temporaire *</Label>
+              <Label htmlFor="password">Mot de Passe *</Label>
               <Input
                 id="password"
                 type="password"
