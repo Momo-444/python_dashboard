@@ -10,7 +10,7 @@ export const TopClientsBar = () => {
       const { data: devis } = await supabase
         .from('devis')
         .select('client_nom, montant_ttc')
-        .eq('statut', 'accepte');
+        .in('statut', ['Payés', 'Signés']);
 
       const clientTotals: Record<string, number> = {};
       devis?.forEach((d) => {
