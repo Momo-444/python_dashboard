@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { useTheme } from 'next-themes';
 
 const COLORS = {
   'nouveau': '#3b82f6',
@@ -14,6 +15,9 @@ const COLORS = {
 };
 
 export const LeadsByStatusPie = () => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   const { data: statusData, isLoading } = useQuery({
     queryKey: ['leadsByStatus'],
     queryFn: async () => {
@@ -88,9 +92,16 @@ export const LeadsByStatusPie = () => {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                color: 'hsl(var(--foreground))'
+                backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                border: isDark ? '1px solid #374151' : '1px solid #e5e7eb',
+                borderRadius: '8px',
+                color: isDark ? '#ffffff' : '#000000'
+              }}
+              itemStyle={{
+                color: isDark ? '#ffffff' : '#000000'
+              }}
+              labelStyle={{
+                color: isDark ? '#ffffff' : '#000000'
               }}
             />
             <Legend />
