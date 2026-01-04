@@ -28,7 +28,7 @@ export const DevisDialog = ({ open, onOpenChange, devis }: DevisDialogProps) => 
   const statut = watch("statut");
   const leadId = watch("lead_id");
   const montantHt = watch("montant_ht") || 0;
-  const tvaPct = watch("tva_pct") || 10;
+  const tvaPct = watch("tva_pct") || 20;
 
   const { data: leads } = useQuery({
     queryKey: ["leadsForDevis"],
@@ -60,7 +60,7 @@ export const DevisDialog = ({ open, onOpenChange, devis }: DevisDialogProps) => 
     } else {
       reset({
         statut: "envoye",
-        tva_pct: 10,
+        tva_pct: 20,
         montant_ht: 0,
         montant_ttc: 0,
         client_nom: "",
